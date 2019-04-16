@@ -1,6 +1,7 @@
 from functools import reduce
-from typing import Callable, Union, List
+from typing import Callable
 from vector_types import Vector, Number
+from math import sqrt
 
 
 def are_equal(*args) -> bool:
@@ -44,3 +45,24 @@ def multiply_by_scalar(x: Vector, scalar: Number) -> Vector:
 
 def divide(x: Vector, num: Number) -> Vector:
     return multiply_by_scalar(x, 1 / num)
+
+
+def multiply(*args) -> Vector:
+    return reduce_operation_with_validation(simple_multiply, validate_equality, *args)
+
+
+def simple_multiply(x: Vector, y: Vector) -> Vector:
+    return [x_ * y_ for x_, y_ in zip(x, y)]
+
+
+def magnitude(x: Vector) -> float:
+    return sqrt(sum(multiply(x, x)))
+
+
+def distance(x: Vector, y: Vector) -> float:
+    return magnitude(subtract(x, y))
+
+
+def mean(*args) -> Vector:
+    quantity = len(args)
+    return [x / quantity for x in add(*args)]
